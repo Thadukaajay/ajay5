@@ -53,8 +53,8 @@ stages:
   - deployment: DeployLinuxWebApp
     displayName: Deploy Linux Web App
     environment: $(environmentName)
-    pool:
-      vmImage: $(vmImageName)
+    pool: 'ajay'
+      #vmImage: $(vmImageName)
     strategy:
       runOnce:
         deploy:
