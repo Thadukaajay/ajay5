@@ -7,37 +7,45 @@ trigger:
 - master
 
 pool: 
-   vmImage: QG Build Servers
-stages:
-- stage: Build
-  displayName: Build stage
-  jobs:
-  - deployment: VMDeploy
-    displayName: Deploy to VM
-    environment: 
-      name: VMenv
-      resourceType: virtualMachine
-      resourceName: TestServer01 # only deploy to the VM resource named USHAN-PC
-      #tags: "service"
-    strategy:
-            runOnce:
-              deploy:
-                steps:
-                  - download: none
+   vmImage: ubuntu-latest
+
 
 variables:
 
   # Azure Resource Manager connection created during pipeline creation
-  azureSubscription: '9612dbff-498c-4266-9eb3-0ff777d5cbbc'
+  azureSubscription: '54f1d765-4c37-47ab-96c5-1ea1c0d98c27'
 
   # Web app name
-  webAppName: 'ajaygoud558'
+  webAppName: 'ajaygoud'
 
   # Environment name
-  environmentName: 'ajaygoud558'
+  #environmentName: 'ajaygoud'
 
   # Agent VM image name
-  #vmImageName: 'ubuntu-latest'
+  #vmImageName: 'linux-latest'
 
+stages:
+- stage: Build
+  displayName: Build stage
+  jobs:
+  - job: MavenPackageAndPublishArtifacts
+    displayName: Maven Package and Publish Artifacts
+    pool:
+      vmImage: ubuntu-latest
+      
 
-  
+    steps:
+    - task: Maven@3
+      displayName: 'Maven Package'
+      inputs:
+        mavenPomFile: 'pom.xml'
+
+    - task: CopyFiles@2
+      displayName: 'Copy Files to artifact staging directory'
+      inputs:
+        SourceFolder: '$(System.DefaultWorkingDirectory)'
+        Contents: '**/target/*.?(war)'
+        TargetFolder: $(Build.ArtifactStagingDirectory)
+
+    - upload: $(Build.ArtifactStagingDirectory)
+      artifact: drop
