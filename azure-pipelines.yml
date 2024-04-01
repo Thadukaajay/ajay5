@@ -16,7 +16,7 @@ variables:
   azureSubscription: '54f1d765-4c37-47ab-96c5-1ea1c0d98c27'
 
   # Web app name
-  webAppName: 'ajaygoud'
+  #webAppName: 'ajaygoud'
 
   # Environment name
   #environmentName: 'ajaygoud'
