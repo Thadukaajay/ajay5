@@ -6,6 +6,23 @@
 trigger:
 - master
 
+pool: 
+   vmImage: QG Build Servers
+ 
+jobs:
+- deployment: VMDeploy
+  displayName: Deploy to VM
+  environment: 
+    name: VMenv
+    resourceType: virtualMachine
+    resourceName: TestServer01 # only deploy to the VM resource named USHAN-PC
+    #tags: "service"
+  strategy:
+          runOnce:
+            deploy:
+              steps:
+                - download: none
+
 variables:
 
   # Azure Resource Manager connection created during pipeline creation
